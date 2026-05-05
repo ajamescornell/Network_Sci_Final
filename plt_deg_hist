@@ -3,13 +3,30 @@
 #-------------------------------
 
 years = ["2008", "2012", "2016","2020","2024"]
+
+
+plt.figure(figsize=(14, 10))
 for i in years:
     G = nx.read_gexf(f"user_user_graph_{i}.gexf")
     count = nx.degree_histogram(G)
-    k = range(len(count))
-    pk = count
+    k = np.arange(len(count))
+    pk = np.array(count)
+
+    #remove 0s (adds noise)
+    mask = (k > 0) & (pk > 0)
+    k_nonzero = k[mask]
+    pk_nonzero = pk[mask]
+
+    log_k = np.log10(k_nonzero)
+    log_pk = np.log10(pk_nonzero)
+
+    a,b = np.polyfit(log_k, log_pk,1)
+
     plt.loglog(k, pk, 'o', label = f"{i}")
-    print(i)
+    fit_pk = 10**(a * log_k + b)
+    plt.loglog(k_nonzero, fit_pk, '-')
+
+    print(i, "slope:", a)
 
 
 plt.ylabel(r"$Count$")
@@ -17,4 +34,6 @@ plt.legend()
 
 plt.xlabel(r"$angle Degree$")
 plt.title("Degree Distribution (Log-Log Scale)")
-plt.savefig("deg-Dist")
+
+plt.ylim(bottom = 1)
+plt.savefig("DegDist.png")
