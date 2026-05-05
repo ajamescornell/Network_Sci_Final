@@ -1,0 +1,58 @@
+#-----------------------------------
+#---GET LIST OF SUBREDDITS IN CSV---
+#----------------------------------
+
+
+def get_subs (infile,col): 
+    new_arr = []
+    seen = set()
+
+    with open(infile, newline = '', encoding='utf-8') as file:
+    
+        read = csv.reader(file)
+        for row in itertools.islice(read, 2, None):
+            if row[col] not in seen:
+                seen.add(row[col])
+                new_arr.append(row[col])
+
+    return(new_arr)    
+
+#----------------------------------
+#---GENERATE WEIGHTED PROJECTION---
+#----------------------------------
+
+def wgt_projection_csv (inputcsv):
+    B = nx.Graph()
+
+    arr_1 = get_subs(inputcsv, 0)
+    arr_2 = get_subs(inputcsv, 1)
+    arr = arr_1 + arr_2
+    
+    top_node = list(set(arr))
+    bottom_node = get_subs(inputcsv, 2)
+    
+    B.add_nodes_from(top_node, bipartite = 0)
+    B.add_nodes_from(bottom_node, bipartite = 1)
+    
+    with open(inputcsv, newline = '', encoding='utf-8') as infile:
+
+        read = csv.reader(infile)
+        
+        for row in read:
+            B.add_edges_from([(row[0], row[2]),(row[1],row[2])])
+    
+    
+    projected = bipartite.weighted_projected_graph(B, bottom_node)
+    for n in projected.nodes():
+        projected.nodes[n]["label"] = str(n)
+    return projected
+
+#------------------------------
+#-----IMPLEMENT FUNCTIONS------
+#------------------------------
+
+for i in years:
+    nx.write_gexf(wgt_projection_csv(f"outputcsv{i}_v2.csv"),f"bpp{i}.gexf")
+
+for i in years:
+    nx.write_gexf(wgt_projection_csv(f"output_politic_test_{i}.csv"), f"bppPoli{i}.gexf")
