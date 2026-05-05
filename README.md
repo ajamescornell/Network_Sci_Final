@@ -8,6 +8,6 @@ Data is from PushShift dump files available through Accademic Torrents:
 
 The entire workflow for this project proceeded as follows:
 
-init_env_read_Zstd:
+init_env_read_Zstd: \n
 This file initializes the program, imports all neccessary libraries, and reads the Zstd files.  
 **Note some imported libraries are needed for subsequent files and are not included in those files
