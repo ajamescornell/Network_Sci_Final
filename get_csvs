@@ -1,0 +1,31 @@
+target_subreddits = {
+    "gaming", 
+    "movies", 
+    "aww", 
+    "videos", 
+    "music",
+    "funny",     
+
+    "worldnews", 
+    "news", 
+    "askscience", 
+    "technology", 
+    "science", 
+
+    "counteveryvote", 
+    "collegerepublicans",
+    "republican", 
+    "thenewright", 
+    "the_donald", 
+    "libertarian", 
+
+    "classical_liberals", 
+    "neutralnews", 
+    "murderedbyaoc", 
+    "wayofthebern", 
+    "dsa", 
+    "progressive", 
+    "democrats"
+}
+
+if 
