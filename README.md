@@ -15,13 +15,14 @@ This file initializes the program, imports all neccessary libraries, and creates
 ### get_csvs:
 Calls function to read zst and saves desired info as CSV
 
-## csv_remove_tages:
+## csv_remove_tags:
 This file removes the tags from the CSV files so that will match between columns
 
 ## metrics
 Functions to get desired metrics from the graphs
 
-
+## more functions
+additional functions that don't have a home.  Functions to save graphs of user-user networks, generate bipartite graphs, and extract all subreddits in a CSV
 
 ## filter_subs:
 optional function that allows user to filter nodes belonging to a particular subreddit. 
@@ -29,5 +30,8 @@ optional function that allows user to filter nodes belonging to a particular sub
 ## gred_mod
 Generate communities using greedy modularity
 
+
+## plt_%%
+plots assortivity and degree distrivution
 ## SIRS SPREAD
 Simulates SIR spread
