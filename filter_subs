@@ -1,0 +1,45 @@
+#----------------------------------
+#------FILTER NETWORKS-------------
+#----------------------------------
+""""
+Optional function to filter out specific subreddits from the larger list of subreddits 
+declared in get_csv 
+""""
+
+
+def filtered_network (inputcsv, Filter_Subs,out_csv_name):
+    outcsv = out_csv_name
+
+    with open(inputcsv, newline = '', encoding='utf-8') as infile, \
+        open(outcsv, 'w', newline = '', encoding='utf-8') as outfile:
+
+        read = csv.reader(infile)
+        write = csv.writer(outfile)
+        
+        write.writerow(["Source", "Target", "Color"] )
+        for row in read:
+            if row[2] in Filter_Subs:
+                write.writerow(row)
+
+
+
+politic_filter = {
+    "counteveryvote", 
+    "collegerepublicans",
+    "republican", 
+    "thenewright", 
+    "the_donald", 
+    "libertarian", 
+
+    "classical_liberals", 
+    "neutralnews", 
+    "murderedbyaoc", 
+    "wayofthebern", 
+    "dsa", 
+    "progressive", 
+    "democrats"
+}
+
+
+for i in years: 
+    filtered_network(f"outputcsv{i}_v2.csv", politic_filter,f"output_politic_test_{i}.csv")
