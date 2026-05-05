@@ -1,0 +1,21 @@
+#---------------------------
+#--FIND, SAVE COMMUNITIES---
+#---------------------------
+
+def find_communities(g, attr_name='c', resolution=1):
+    """
+    Runs NetworkX's greedy modularity and returns a graph with nodes holding their community attribute.
+    Also returns the communities found as a list of sets like [{comm_1_nodes}, {comm_2_nodes},...].
+    """
+    comms = nx.community.greedy_modularity_communities(g, resolution=resolution)
+
+    for comm_idx, comm in enumerate(comms):
+        for node_idx in comm:
+            g.nodes[node_idx][attr_name] = comm_idx
+    return g, comms
+
+
+g = nx.read_gexf("user_user_graph_2016.gexf")
+
+g, comms = find_communities(g, attr_name='comm')
+nx.write_gexf(g, "user_user_graph_2016_mod.gexf")
