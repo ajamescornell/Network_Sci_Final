@@ -48,6 +48,36 @@ def graph_metrics(G, top_n, year):
 
     return printstmt(top_DC, top_BC, top_EV, top_NC, avg_clustering, assortativity, year)
 
+##Second, individual function for Eigenvector Centrality to run without having overhead of other measures
+
+
+def ev (G, topN, year):
+    largestCC = max(nx.connected_components(G), key = len)
+    LCC=G.subgraph(largestCC).copy()
+    try:
+        eigenvector_centrality = nx.eigenvector_centrality(LCC, max_iter=1000)
+    except nx.PowerIterationFailedConvergence:
+        eigenvector_centrality = nx.eigenvector_centrality_numpy(LCC)
+    top_EV = sorted(eigenvector_centrality.items(), key=lambda item: item[1], reverse=True)[:topN]
+    
+    def printdict(a, stri):
+        results = []
+        for key, val in a:
+            results.append(f"User: {key}  |  {stri}: {val}")
+        return "\n".join(results)
+    
+    return f"{year}------------\n" +\
+    printdict(top_EV, "Eigenvector Centrality:")
+
+
+# %%
+for i in years:
+    print(ev(nx.read_gexf(f"user_user_graph_{i}.gexf"), 5, i))
+
+
+
+
+
 #------------------------------------
 #-----RUN ON ELECTION YEARS----------
 #-------------------------------------
