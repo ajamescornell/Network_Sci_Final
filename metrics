@@ -1,0 +1,71 @@
+#------------------------
+#-----GET METRICS--------
+#------------------------
+
+def graph_metrics(G, top_n, year):
+    
+    # ---- Centrality Measures ----
+    degree_centrality = nx.degree_centrality(G)
+    top_DC = sorted(degree_centrality.items(), key=lambda item: item[1], reverse = True) [:top_n]
+    print(f"NEXT1{year}")
+
+    betweenness_centrality = nx.betweenness_centrality(G, k =100, normalized = True)
+    top_BC = sorted(betweenness_centrality.items(), key=lambda item: item[1], reverse = True) [:top_n]
+    print("NEXT2")
+
+
+    eigenvector_centrality = nx.eigenvector_centrality(G, max_iter=1000)
+    top_EV = sorted(eigenvector_centrality.items(), key=lambda item: item[1], reverse = True) [:top_n]
+    print(f"NEXT4{year}")
+
+    node_clustering = nx.clustering(G)
+    top_NC = sorted(node_clustering.items(), key=lambda item: item[1], reverse = True) [:top_n]
+    print("NEXT5")
+    avg_clustering = sum(node_clustering.values())/len(node_clustering)
+    print("NEXT6")
+    assortativity = nx.degree_assortativity_coefficient(G)
+    print(f"NEXT7{year}")
+
+
+    #Save metrics as dictionary
+
+    
+    def printdict(a, stri):
+        results = []
+        for key, val in a:
+            results.append(f"User: {key}  |  {stri}: {val}")
+        return "\n".join(results)
+
+    def printstmt(da, dc,db, de, i1, i2, r):
+        return f"YEAR: {r}----------\nTop Degree Centrality:\n" + printdict(da, "Degree Centrality") +\
+        "\nTop Betweeness Centrality: \n"+printdict(db, "Betweeness")+\
+        "\nTop Eigenvector Centrality: \n" + printdict(dc,"Eigenvector Centrality")+\
+        "\nTop Node Clustering\n" + printdict(de, "Clustering")+\
+        f"\n Average Clustring: {i1}\nAvssortivity: {i2}"
+        
+            
+
+
+    return printstmt(top_DC, top_BC, top_EV, top_NC, avg_clustering, assortativity, year)
+
+#------------------------------------
+#-----RUN ON ELECTION YEARS----------
+#-------------------------------------
+
+years = ["2008", "2012", "2016","2020","2024"]
+
+with open("results.txt", 'w') as f:
+    for i in years:
+        report = graph_metrics(nx.read_gexf(f"user_user_graph_{i}.gexf"), 5, i)
+        f.write(report+"\n\n")
+        G = nx.read_gexf(f"user_user_graph_{i}.gexf")
+        print(f"Year: {i}\nNodes: {G.number_of_nodes()}\nEdges: {G.number_of_edges()}")
+
+
+
+#Get all ASST 
+years = [ "2006", "2007", "2009", "2011", "2013", "2015", "2017", "2019", "2021", "2023", "2025", "2008", "2012", "2016","2020","2024"]
+
+for i in years:
+    r = nx.degree_assortativity_coefficient(nx.read_gexf(f"user_user_graph_{i}.gexf"))
+    print(f"Assortativity Coefficient {i}: {r}")
