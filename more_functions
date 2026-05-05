@@ -56,3 +56,19 @@ for i in years:
 
 for i in years:
     nx.write_gexf(wgt_projection_csv(f"output_politic_test_{i}.csv"), f"bppPoli{i}.gexf")
+
+#-------------------------------
+#---WRITE USER-USER AS .GEFX----
+#-------------------------------
+
+for i in years:
+    g = nx.Graph()
+    with open(f"outputcsv{i}_v2.csv", 'r', encoding = 'utf-8') as file:
+        reader = csv.reader(file)
+        next(reader)
+        next(reader)
+
+        for row in reader:
+            g.add_edge(row[0],row[1], label = row[2])
+    nx.write_gexf(g, f'user_user_graph_{i}.gexf')
+    print(i)
