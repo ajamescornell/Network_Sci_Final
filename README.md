@@ -13,7 +13,7 @@ init_env_read_Zstd:
 This file initializes the program, imports all neccessary libraries, and creates function to read the Zstd files.  
 **Note some imported libraries are needed for subsequent files and are not included in those files
 
-# get_csvs:
+## get_csvs:
 Calls function to read zst and saves desired info as CSV
 
 csv_remove_tages:
