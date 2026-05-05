@@ -13,6 +13,10 @@ init_env_read_Zstd:
 This file initializes the program, imports all neccessary libraries, and reads the Zstd files.  
 **Note some imported libraries are needed for subsequent files and are not included in those files
 
+get_csvs:
+this file gets 
+
+
 csv_remove_tages:
 
 This file removes the tags from the CSV files so that will match between columns
