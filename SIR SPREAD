@@ -1,0 +1,86 @@
+# -----------------------------
+# SIR SIMULATION
+# -----------------------------
+def run_sr_simulation(G, beta=0.05, gamma=0.02, max_steps=50):
+    nodes = list(G.nodes())
+    
+        infected = set([random.choice(nodes)])
+    recovered = set()
+    
+    S_counts = [len(nodes) - 1]
+    I_counts = [1]
+    R_counts = [0]
+
+    for step in range(max_steps):
+        new_infected = set()
+        new_recovered = set()
+
+        # Infection step
+        for node in infected:
+            for nbr in G.neighbors(node):
+                if nbr not in infected and nbr not in recovered:
+                    if random.random() < beta:
+                        new_infected.add(nbr)
+
+        # Recovery step
+        for node in infected:
+            if random.random() < gamma:
+                new_recovered.add(node)
+
+        # Update states
+        infected = (infected | new_infected) - new_recovered
+        recovered = recovered | new_recovered
+
+        # Track counts
+        S_counts.append(len(nodes) - len(infected) - len(recovered))
+        I_counts.append(len(infected))
+        R_counts.append(len(recovered))
+
+        # Stop if no more infections
+        if len(infected) == 0:
+            break
+
+    return S_counts, I_counts, R_counts
+
+
+
+def average_simulation(G, runs=10, beta=0.05, max_steps=50):
+    all_runs = []
+
+    for _ in range(runs):
+        result = run_si_simulation(G, beta, max_steps)
+        all_runs.append(result)
+
+
+# -----------------------------
+# -----PLOT-------
+# -----------------------------
+def plot_infection_curve(curve, total_nodes, label="Network"):
+    percent_infected = [(x / total_nodes) * 100 for x in curve]
+
+    plt.figure()
+    plt.plot(percent_infected)
+    plt.xlabel("Time Step")
+    plt.ylabel("Percent Infected (%)")
+    plt.title(f"SI Spread - {label}")
+    plt.grid()
+    plt.show()
+
+
+
+G = nx.read_gexf("user_user_graph_2008.gexf")
+G = G.subgraph(max(nx.connected_components(G), key=len)).copy()
+
+curve = average_simulation(G, runs=15, beta=0.05, max_steps=50)
+
+plot_infection_curve(curve, len(G.nodes()), label="2008 SIR Attack")
+
+G = nx.read_gexf("user_user_graph_2009.gexf")
+G = G.subgraph(max(nx.connected_components(G), key=len)).copy()
+curve = average_simulation(G, runs=15, beta=0.05, max_steps=50)
+plot_infection_curve(curve, len(G.nodes()), label="2009 SI Attack")
+
+G = nx.read_gexf("user_user_graph_2011.gexf")
+G = G.subgraph(max(nx.connected_components(G), key=len)).copy()
+curve = average_simulation(G, runs=15, beta=0.05, max_steps=50)
+plot_infection_curve(curve, len(G.nodes()), label="2010 SI Attack")
