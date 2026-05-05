@@ -1,0 +1,13 @@
+def get_subs (infile,col): 
+    new_arr = []
+    seen = set()
+
+    with open(infile, newline = '', encoding='utf-8') as file:
+    
+        read = csv.reader(file)
+        for row in itertools.islice(read, 2, None):
+            if row[col] not in seen:
+                seen.add(row[col])
+                new_arr.append(row[col])
+
+    return(new_arr)    
